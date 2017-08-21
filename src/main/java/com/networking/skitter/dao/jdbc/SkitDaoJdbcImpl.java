@@ -28,6 +28,8 @@ public class SkitDaoJdbcImpl implements SkitDao {
 	public void setup() {
 		dbTemplate = new JdbcTemplate(dataSource);
 		jdbcInsert = new SimpleJdbcInsert(dataSource);
+		jdbcInsert.setTableName("skit");
+		jdbcInsert.setGeneratedKeyName("skit_id");
 	}
 	
 	@Override
@@ -43,7 +45,7 @@ public class SkitDaoJdbcImpl implements SkitDao {
 	
 	private Skit toSkit(Map<String, Object> row) {
 		Skit skit = new Skit();
-		skit.setSkitId((int) row.get("skit_it"));
+		skit.setSkitId((long) row.get("skit_id"));
 		skit.setAccountId((int) row.get("account_id"));
 		skit.setPostDate((Date) row.get("post_date"));
 		skit.setText((String) row.get("text"));
@@ -53,7 +55,7 @@ public class SkitDaoJdbcImpl implements SkitDao {
 	@Override
 	public List<Skit> getSkitsByUser(int userId) {
 		List<Map<String, Object>> results = dbTemplate.queryForList(
-				"select S.* from skit S inner join skitter_account U on S.account_id = U.account_id where U.account_id = *",
+				"select S.* from skit S inner join skitter_account U on S.account_id = U.account_id where U.account_id = ?",
 				userId);
 
 		List<Skit> skits = new ArrayList<>();
@@ -75,7 +77,7 @@ public class SkitDaoJdbcImpl implements SkitDao {
 				"select S.* from skit S "
 				+ "inner join skitter_account U on S.account_id = U.account_id "
 				+ "inner join relationship R on U.account_id = R.followee "
-				+ "where R.follower = *",
+				+ "where R.follower = ?",
 				userId);
 
 		List<Skit> skits = new ArrayList<>();

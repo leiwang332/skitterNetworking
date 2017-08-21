@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.Date;
 
 public class Skit {
-	private int skitId;
+	private long skitId;
 	private int accountId;
 	private Date postDate;
 	private String text;
@@ -13,10 +13,10 @@ public class Skit {
 	public Skit(){
 	}
 	
-	public int getSkitId() {
+	public long getSkitId() {
 		return skitId;
 	}
-	public void setSkitId(int skitId) {
+	public void setSkitId(long skitId) {
 		this.skitId = skitId;
 	}
 	public int getAccountId() {
